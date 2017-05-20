@@ -45,7 +45,7 @@
                     rem:$("#id_rem").val(),
                     csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
                 }
-            }).done(data){
+            }).done(function(data){
                     console.log("successrun");
                     if(data["status"]=="ok"){
                         window.location="{% url 'frontsite' %}";
@@ -54,9 +54,8 @@
                     {
                         window.location="{% url 'ajax_login' %}";
                     }
-                }
+                });
             });
         });
-    });
 </script>
 {% endblock %}
