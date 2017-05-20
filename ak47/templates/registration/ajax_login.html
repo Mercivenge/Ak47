@@ -33,7 +33,7 @@
 {% block javascript %}
 <script>
     $('document').ready(function () {
-        $('#id_form').on('submit', '#id_form', function (e) {
+        $('#id_form').submit(function (e) {
             e.preventDefault();
             $.ajax({
                 type:"POST",

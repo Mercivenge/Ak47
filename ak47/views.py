@@ -1,4 +1,3 @@
-import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, FormView, UpdateView, TemplateView, CreateView, RedirectView
 from django.views.generic.edit import FormMixin
@@ -11,7 +10,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from taggit.models import Tag
-import redis
 from django.conf import settings
 from django.views.generic.detail import DetailView
 from django.urls import reverse, reverse_lazy
@@ -39,34 +37,31 @@ def post_list(request, tag_slug=None):
                    'tag': tag})
 
 
-r = redis.StrictRedis(host=settings.REDIS_HOST,
-                      port=settings.REDIS_PORT,
-                      db=settings.REDIS_DB)
-
 
 class PostListView(ListView, FormMixin):
+
+    queryset = Post.objects.active()
     model = Post
     paginate_by = 10
     template_name = 'ak47/frontsite.html'
     form_class = TagForm
+    tag = None
 
     def get_queryset(self):
-        qs = super().get_queryset().active()
+        qs = super().get_queryset()
         if 'tag' in self.kwargs:
-            tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
-            qs = qs.filter(tags__in=[tag])
+            tag = self.tag.get_object_or_404(Tag, slug=self.kwargs['tag'])
+            qs = qs.filter(tags__in=[self.tag])
         return qs
 
     def get_context_data(self, **kwargs):
         kwargs.update({
-            'tag': self.request.GET.get('tag', '')
+            'tag': self.tag
         })
         return super().get_context_data(**kwargs)
 
 class AbyssListView(PostListView):
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs
+    queryset = Post.objects.all()
 
 class TagListView(PostListView):
     def get_queryset(self):
@@ -127,9 +122,8 @@ def post_detail(request, id, slug):
 class RegisterAjaxView(FormView):
     form_class = UserCreationForm
     template_name = 'registration/register.html'
-    def post(self, request, *args, **kwargs):
-        form=self.form_class(request.POST)
-        if form.is_valid():
+
+    def form_valid(self, form):
             new_user = form.save(commit=False)
             print(form.data)
             new_user.set_password(form.cleaned_data['password1'])
@@ -137,9 +131,11 @@ class RegisterAjaxView(FormView):
             profile = Profile.objects.create(user=new_user)
             messages.success(request,'User registered successfully')
             data = {'status': 'ok'}
-        else:
+            return JsonResponse(data=data)
+
+    def form_invalid(self, form):
             data = {'status': 'invalidform'}
-        return JsonResponse(data=data)
+            return JsonResponse(data=data)
 
 
 
