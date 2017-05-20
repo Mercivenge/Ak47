@@ -31,35 +31,4 @@
     </div>
 {% endblock %}
 {% block script %}
-<script>
-    $('document').ready(function () {
-        $('#id_form').on('submit', '#id_form', function (e) {
-            e.preventDefault();
-            $.ajax({
-                type:"POST",
-                url: "{% url 'ajax_login' %}",
-                datatype:"json",
-                data:{
-                    id_username:$("#id_username").val(),
-                    id_password:$("#id_password").val(),
-                    rem:$("#id_rem").val(),
-                    csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
-                },
-                error:function(xhr, ajaxOptions, thrownError) {
-                    alert(thrownError);
-                },
-                complete:function(data){
-                    console.log("successrun");
-                    if(data["status"]=="ok"){
-                        window.location="{% url 'frontsite' %}";
-                    }
-                    else
-                    {
-                        window.location="{% url 'ajax_login' %}";
-                    }
-                }
-            });
-        });
-    });
-</script>
 {% endblock %}
