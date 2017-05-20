@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="jumbotron post">
+    <form role="form" action="." method="post" enctype="multipart/form-data"> {% csrf_token %}
+        {% if image_form.errors %}
+    {% for field in image_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in image_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+    {% endif %}
+    <legend>Add your image</legend>
+    {% csrf_token %}
+    <p><label for="id_title">Title:</label>
+        <input id="id_title" maxlength="250" name="title" required="" type="text" class="form-control">
+    </p>
+    <p><label for="id_image">Image:
+        <div class="form-group">
+            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput">
+                    <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                    <span class="fileinput-filename"></span>
+                </div>
+                <span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Select file</span>
+                    <span class="fileinput-exists">Change</span>
+                    <input type="file" accept=".gif,.png,.jpg,.jpeg" name="image" id="id_image" required="">
+                </span>
+                <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+            </div>
+        </div>
+    </p>
+    <p><label for="id_tags">Tags:</label>
+        <input id="id_tags" name="tags" type="text" class="form-control">
+        <span class="helptext">A comma-separated list of tags.</span>
+    </p>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+</form>
+    </div>
+{% endblock %}

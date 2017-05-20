@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="jumbotron post text-center">
+    <a class="btn btn-primary btn-lg btn-block" href="{% url "url_image" %}">Add url link</a>
+    <a class="btn btn-primary btn-lg btn-block" href="{% url "add_video" %}">Add video link</a>
+    <a class="btn btn-primary btn-lg btn-block" href="{% url "add_image" %}">Upload image</a>
+</div>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

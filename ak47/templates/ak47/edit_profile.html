@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+{% block content %}
+    <div class="jumbotron post">
+        {% if profile_form.errors %}
+    {% for field in profile_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in profile_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+    {% endif %}
+    <form id="edit_form" method="post" action="." enctype="multipart/form-data">{% csrf_token %}
+        <legend>Change your avatar</legend>
+            <h3 class="text-center">Current avatar:
+        {% if user.profile.avatar %}
+            {% thumbnail user.profile.avatar "100" as im %}
+                <img src="{{ im.url }}" class="image-post">
+            {% endthumbnail %}
+        {% else %}
+            {% with 'http://'|add:request.get_host|add:MEDIA_URL|add:"/images/avatar.jpg" as avatar %}
+                {% thumbnail avatar "100" as im %}
+                    <img src="{{ im.url }}" class="image-post">
+                {% endthumbnail %}
+            {% endwith %}
+        {% endif %}
+            </h3>
+        <p>
+            <div class="form-group">
+                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="form-control" data-trigger="fileinput">
+                        <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                        <span class="fileinput-filename"></span>
+                    </div>
+                    <span class="input-group-addon btn btn-default btn-file">
+                        <span class="fileinput-new">Select file</span>
+                        <span class="fileinput-exists">Change</span>
+                        <input type="file" accept=".gif,.png,.jpg,.jpeg" name="avatar" id="id_avatar" required="">
+                    </span>
+                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                </div>
+            </div>
+        </p>
+        <input class="btn btn-default" value="Change" type="submit">
+    </form>
+    </div>
+    <script>
+    $(document).ready(function (){
+        $('#edit_form').submit(function (e) {
+            e.preventDefault();
+            var $form = $(this),
+                url = $form.attr('action');
+            var posting = $.post(url, {name:})
+            });
+        });
+    });
+    </script>
+{% endblock %}

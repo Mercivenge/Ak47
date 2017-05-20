@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Log-in{% endblock %}
+
+{% block content %}
+    <div class="jumbotron post">
+        <h1>Log-in</h1>
+            <h2>Please, use the following form to log-in.</h2>
+        <div class="login-form">
+            <form action="." method="post" id="id_form">
+                <div class="form-group">
+                <label for="login">Login:</label>
+                <input type="text" class="form-control" id="id_username" name="username" required="">
+                </div>
+                <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="id_password" name="password" required="">
+                </div>
+                {% csrf_token %}
+                <div class="form-group">
+                <label for="rem" class="label">Remember me!</label>
+                <input type="checkbox" class="checkbox-inline" name="rem" id="id_rem">
+                </div>
+                <input type="hidden" name="next" value="{% url "frontsite" %}" />
+                <button type="submit" value="Log-in" class="btn btn-default">Log-in</button>
+                <a href="{% url "password_reset" %}">
+                    <button value="Forgotten password" type="button" class="btn btn-default">Forgotten password</button>
+                </a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    $('document').ready(function () {
+        $('#id_form').on('submit', '#id_form', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type:"POST",
+                url: "{% url 'ajax_login' %}",
+                datatype:"json",
+                data:{
+                    id_username:$("#id_username").val(),
+                    id_password:$("#id_password").val(),
+                    rem:$("#id_rem").val(),
+                    csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
+                }
+            }.done(data){
+                    console.log("successrun");
+                    if(data["status"]=="ok"){
+                        window.location="{% url 'frontsite' %}";
+                    }
+                    else
+                    {
+                        window.location="{% url 'ajax_login' %}";
+                    }
+                }.
+            });
+        });
+    });
+</script>
+{% endblock %}

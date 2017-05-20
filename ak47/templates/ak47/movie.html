@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="jumbotron post">
+        <form role="form" action="." method="post"> {% csrf_token %}
+        {% if movie_form.errors %}
+    {% for field in movie_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in movie_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+    {% endif %}
+            <legend>Add your video</legend>
+    <p><label for="id_title">Title:</label>
+        <input id="id_title" maxlength="250" name="title" required="" class="form-control" type="text">
+    </p>
+<p><label for="id_movie">Movie url:</label>
+    <input id="id_movie" maxlength="200" name="movie" type="url" class="form-control" required="">
+    <span class="helptext">Link from youtube or dailymotion</span>
+
+</p>
+<p><label for="id_tags">Tags:</label><input id="id_tags" name="tags" type="text" class="form-control">
+    <span class="helptext">A comma-separated list of tags.</span>
+</p>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+</form>
+    </div>
+{% endblock %}

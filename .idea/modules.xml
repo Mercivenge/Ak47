@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../bookmarks/.idea/bookmarks.iml" filepath="$PROJECT_DIR$/../bookmarks/.idea/bookmarks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/silverak.iml" filepath="$PROJECT_DIR$/.idea/silverak.iml" />
+    </modules>
+  </component>
+</project>

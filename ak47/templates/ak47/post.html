@@ -1,0 +1,22 @@
+{% load thumbnail %}
+{% load embed_video_tags %}
+    <h2 class="text-center">
+        <a href="{{ post.get_absolute_url }} " class="center-block">
+            <h1 class="post text-center">
+                {{ post.title }}
+                <div class="center-block">
+                {% if post.image %}
+                    {% thumbnail post.image "800" as im %}
+                        <img src="{{ im.url }}" class="image-post" width="100%">
+                    {% endthumbnail %}
+                {% elif post.movie %}
+                    {% video post.movie as my_video %}
+                    <div class="videoWrapper">
+                        {% video my_video '100%x100%' %}
+                    </div>
+                    {% endvideo %}
+                {% endif %}
+                </div>
+            </h1>
+        </a>
+    </h2>

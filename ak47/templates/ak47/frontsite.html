@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}Gabens Daily dose of game memes{% endblock %}
+{% block content %}
+    {% if tag %}
+        <div class="jumbotron">
+        <h2>Posts tagged with "{{ tag.name }}"</h2>
+        </div>
+    {% endif %}
+    {% for post in object_list %}
+        {% include "ak47/post.html" %}
+    {% endfor %}
+    {% include "ak47/pagination.html" with page=page_obj %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% load message_tags %}
+{% if messages %}
+    {% for message in messages %}
+        {% get_twitter_bootstrap_alert_msg_css_name message.tags as alert_tag %}
+            <div class="alert alert-{{ alert_tag }}">
+                {{ message }}<a href="#" class="close" data-dismiss="alert">✖</a>
+            </div>
+        {% endfor %}
+{% endif %}

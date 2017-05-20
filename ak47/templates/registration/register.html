@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+    <div class="jumbotron post">
+    {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+    {% endif %}
+    <h1>Create an account</h1>
+    <p>Please, sign up using the following form:</p>
+    <form action="." method="post" class="form-group" id="id_form">
+    <p><label for="id_username">Username:</label>
+      <input autofocus="" id="id_username" maxlength="150" name="username" required="" type="text" class="form-control">
+      <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span></p>
+    <p><label for="id_password1">Password:</label>
+      <input id="id_password1" name="password1" required="" type="password" class="form-control"></p>
+    <p><label for="id_password2">Password confirmation:</label>
+      <input id="id_password2" name="password2" required="" type="password" class="form-control">
+      <span class="helptext">Enter the same password as before, for verification.</span></p>
+    <input value="Create my account" class="btn btn-default" type="submit">
+    {% csrf_token %}
+    </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+    $('document').ready(function () {
+        $('#id_form').on('submit', '#id_form', function (e) {
+            e.preventDefault();
+            console.log("clicked");
+            $.ajax({
+                type:"POST",
+                url: "{% url 'ajax_register' %}",
+                datatype:"json",
+                data:{
+                    id_username:$("#id_username").val(),
+                    id_password1:$("#id_password1").val(),
+                    id_password2:$("#id_password2").val(),
+                    csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                },
+                success:function(data){
+                    console.log("successrun");
+                    if(data["status"]=="ok"){
+                        window.location="{% url 'frontsite' %}";
+                    }
+                    else
+                    {
+                        window.location="{% url 'ajax_register' %}";
+                    }
+                }
+            });
+            console.log("after ajax");
+        });
+    });
+    </script>
+{% endblock %}

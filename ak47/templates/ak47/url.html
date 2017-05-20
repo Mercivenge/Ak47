@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="jumbotron post">
+    <form role="form" action="." method="post" enctype="multipart/form-data"> {% csrf_token %}
+        {% if url_form.errors %}
+    {% for field in url_form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in url_form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+    {% endif %}
+    <legend>Add your image</legend>
+    {% csrf_token %}
+    <p><label for="id_title">Title:</label>
+        <input id="id_title" maxlength="250" name="title" required="" type="text" class="form-control">
+    </p>
+    <p><label for="id_image_url">Image url:</label>
+        <input class="form-control" id="id_image_url" maxlength="200" name="image_url" required="" type="url">
+    </p>
+    <p><label for="id_tags">Tags:</label>
+        <input id="id_tags" name="tags" type="text" class="form-control">
+        <span class="helptext">A comma-separated list of tags.</span>
+    </p>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+</form>
+    </div>
+{% endblock %}
