@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, FormView, UpdateView, TemplateView, CreateView
+from django.views.generic import ListView, FormView, UpdateView, TemplateView, CreateView, RedirectView
 from django.views.generic.edit import FormMixin
 from .models import Profile, Post
 from .forms import LoginForm, UserRegistrationForm, CommentForm, ImgForm, MovieForm, UrlImgForm, ProfileEditForm, TagForm
@@ -52,16 +52,31 @@ class PostListView(ListView, FormMixin):
 
     def get_queryset(self):
         qs = super().get_queryset().active()
-        if 'tags' in self.kwargs:
-            tags = get_object_or_404(Tag, slug=self.kwargs['tags'])
-            qs = qs.filter(tags__in=[tags])
+        if 'tag' in self.kwargs:
+            tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
+            qs = qs.filter(tags__in=[tag])
         return qs
 
     def get_context_data(self, **kwargs):
         kwargs.update({
-            'tags': self.request.GET.get('tag', '')
+            'tag': self.request.GET.get('tag', '')
         })
         return super().get_context_data(**kwargs)
+
+class AbyssListView(PostListView):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs
+
+class TagListView(PostListView):
+    def get_queryset(self):
+        form = self.get_form()
+        cd = form.cleaned_data
+
+class FrontRedirect(RedirectView):
+
+
+
 
 class PostDetailsView(FormMixin, DetailView):
     model = Post
@@ -93,7 +108,6 @@ class PostDetailsView(FormMixin, DetailView):
 
     def get_success_url(self):
         return reverse('post_detail', kwargs={'pk': self.object.pk, 'slug': self.object.slug})
-
 
 
 def post_detail(request, id, slug):
