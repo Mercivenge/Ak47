@@ -50,8 +50,11 @@ class PostListView(ListView, FormMixin):
     def get_queryset(self):
         qs = super().get_queryset()
         if 'tag' in self.kwargs:
-            tag = self.tag.get_object_or_404(Tag, slug=self.kwargs['tag'])
-            qs = qs.filter(tags__in=[self.tag])
+            tag = self.tag.objects.filtrer(Tag, slug=self.kwargs['tag']).first()
+            if tag:
+                qs = qs.filter(tags__in=[self.tag])
+            else:
+                qs = qs.empty()
         return qs
 
     def get_context_data(self, **kwargs):

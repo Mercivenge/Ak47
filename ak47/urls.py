@@ -7,9 +7,9 @@ from django.contrib.auth.views import password_change, password_change_done, pas
 urlpatterns = [
 #main url section
 url(r'^frontsite$', views.PostListView.as_view(), name='frontsite'),
-url(r'^frontsite/(?P<tag>[-\w]+)/$', views.PostListView.as_view(), name='tagged_frontsite'),
+url(r'^frontsite/(?P<tag>[-\w]+)/$', views.PostListView.as_view(), name='frontsite'),
 url(r'^abyss/$', views.AbyssListView.as_view(), name='abyss'),
-url(r'^abyss/(?P<tag>[-\w]+)/$', views.AbyssListView.as_view(), name='tagged_abyss'),
+url(r'^abyss/(?P<tag>[-\w]+)/$', views.AbyssListView.as_view(), name='abyss'),
 
 #url(r'^tag/(?P<tag_slug>[-\w]+)/$', views.post_list,
 #    name='post_list_by_tag'),
