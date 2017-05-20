@@ -73,11 +73,6 @@ class TagListView(PostListView):
         form = self.get_form()
         cd = form.cleaned_data
 
-class FrontRedirect(RedirectView):
-
-
-
-
 class PostDetailsView(FormMixin, DetailView):
     model = Post
     template_name = 'ak47/post_detail.html'

@@ -6,7 +6,6 @@ from django.contrib.auth.views import password_change, password_change_done, pas
                                       password_reset_complete, password_reset_confirm
 urlpatterns = [
 #main url section
-url(r'^$', view.)
 url(r'^frontsite$', views.PostListView.as_view(), name='frontsite'),
 url(r'^abyss/$', views.AbyssListView.as_view(), name='abyss'),
 #url(r'^tag/(?P<tag_slug>[-\w]+)/$', views.post_list,
