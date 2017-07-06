@@ -16,6 +16,7 @@ from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseForbidden, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
 def post_list(request, tag_slug=None):
     object_list = Post.objects.active()
     tag = None
@@ -64,7 +65,12 @@ class PostListView(ListView, FormMixin):
         return super().get_context_data(**kwargs)
 
 class AbyssListView(PostListView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().filter(active=False)
+    model = Post
+    paginate_by = 10
+    template_name = 'ak47/frontsite.html'
+    form_class = TagForm
+    tag = None
 
 class TagListView(PostListView):
     def get_queryset(self):
@@ -283,7 +289,7 @@ def add_video(request):
         movie_form = MovieForm()
     return render(request, 'ak47/movie.html', {'movie_form': movie_form})
 
-class AddingView(CreateView, LoginRequiredMixin):
+class AddingView(LoginRequiredMixin, CreateView):
         def form_valid(self, form):
             user = self.request.user
             new_post = form.save(commit=False)
